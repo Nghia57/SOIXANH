@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sợi Xanh - Board Game tái chế</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .top-banner {
+            width: 100%;
+            height: 100px;
+            background-image: url('https://cdn11.dienmaycholon.vn/filewebdmclnew/public/userupload/files/Knms/meo-vat/thanh-phan-co-ban-cua-bo-co-ty-phu.jpg');
+            background-size: cover;
+            background-position: center;
+            margin-bottom: 20px;
+        }
+        .navbar {
+            background-color: #fff;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .navbar .logo {
+            display: flex; 
+            align-items: center; 
+        }
+        .navbar .logo img {
+            height: 90px; /* Điều chỉnh chiều cao của logo */
+            width: auto;   /* Giữ tỷ lệ của hình ảnh */
+        }
+        .navbar .search {
+            display: flex;
+            align-items: center;
+        }
+        .navbar .search input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px 0 0 5px;
+            outline: none;
+            width: 250px;
+        }
+        .navbar .search button {
+            padding: 10px 15px;
+            background-color: #ff9800;
+            border: none;
+            color: #fff;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+        }
+        .navbar .support {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .navbar .support a {
+            text-decoration: none;
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .navbar .cart {
+            padding: 10px 15px;
+            background-color: #ff9800;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .menu {
+            background-color: #c0392b;
+            padding: 12px 30px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            margin-bottom: 20px;
+        }
+        .menu .dropdown {
+            position: relative;
+        }
+        .menu .dropdown-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 5px;
+        }
+        .menu .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            min-width: 200px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+            top: 100%;
+            left: 0;
+            color: #333;
+        }
+        .menu .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        .menu .menu-item {
+            cursor: pointer;
+            padding: 5px;
+        }
+        .product-section {
+            padding: 30px;
+            background-color: #f5f5f5;
+        }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 30px;
+        }
+        .product-card {
+            background-color: #fff;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+            padding-bottom: 10px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+        .product-card img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+        }
+        .product-card .discount {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: #e91e63;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        .product-card .info {
+            padding: 15px;
+        }
+        .product-card .name {
+            font-size: 16px;
+            margin: 10px 0;
+            color: #333;
+        }
+        .product-card .price {
+            font-size: 14px;
+            color: #e91e63;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .product-card .sold {
+            font-size: 12px;
+            color: #777;
+        }
+        .content-section {
+            display: none;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+        }
+        .content-section h2 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+        .content-section p {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        .product-detail-section {
+            display: none;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+        }
+        .product-detail-section .back-button {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #27ae60;
+            color: #fff;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+        .product-detail-section .product-info {
+            display: flex;
+            gap: 30px;
+        }
+        .product-detail-section img {
+            width: 300px;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        .product-detail-section .details {
+            flex: 1;
+        }
+        .product-detail-section .name {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .product-detail-section .price {
+            font-size: 20px;
+            color: #e91e63;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .product-detail-section .discount {
+            background-color: #e91e63;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        .product-detail-section .sold {
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 20px;
+        }
+        .product-detail-section .policy {
+            margin-top: 20px;
+        }
+        .product-detail-section .policy h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .product-detail-section .policy p {
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .promo-banner {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .promo-banner a {
+            color: #e91e63;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .social-icons .contact-text {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+        .social-icons {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            gap: 15px;
+        }
+        .social-icons a {
+            text-decoration: none;
+        }
+        .social-icons img {
+            width: 50px;
+            height: 50px;
+            transition: transform 0.3s;
+        }
+        .social-icons img:hover {
+            transform: scale(1.1);
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+            gap: 10px;
+        }
+        .pagination button {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fff;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .pagination button.active {
+            background-color: #c0392b;
+            color: #fff;
+            border-color: #c0392b;
+        }
+        .pagination button:hover:not(.active) {
+            background-color: #f0f0f0;
+        }
+        .pagination button:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        .no-search-results {
+            text-align: center;
+            padding: 20px;
+            color: #888;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-banner"></div>
+    
+    <div class="navbar">
+        <div class="logo"><img src="https://scontent.fhan2-4.fna.fbcdn.net/v/t39.30808-6/503976246_122100862100899192_3210670711225058536_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeGndXtQrw1t-0aUuTtdn0LcnT2qYxyfP8idPapjHJ8_yMajJJ5tjtDYJ1jM0s4i_6R6U5dmUs_znMcy6fMUcESV&_nc_ohc=bXSkGCFz5SAQ7kNvwEeCugk&_nc_oc=AdnssogH8FdYQYr0M6IP7jVcOMsu4IGTBcx0oCkO_4lIHGDf3shIwWc_k2uzDqwT2-E&_nc_zt=23&_nc_ht=scontent.fhan2-4.fna&_nc_gid=Ad6ipdZrvWdT_zfvZQeUfA&oh=00_AfM2m_vEjinp0mpYAJorVPVPnHwIwoH4yn38Ee6bPX4SWA&oe=6847BBCE" alt="Sợi Xanh Logo"></div>
+        <div class="search">
+            <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm...">
+            <button id="searchButton">Tìm</button>
+        </div>
+        <div class="support">
+            <a href="tel:0971411122">Hỗ trợ khách hàng 0976.654.536</a>
+            <a href="#" class="cart">Giỏ hàng</a>
+        </div>
+    </div>
+    
+    <div class="menu">
+        <div class="dropdown">
+            <button class="dropdown-btn">Danh mục sản phẩm <span class="icon">▼</span></button>
+            <div class="dropdown-content">
+                <a href="#" onclick="showProducts('boardGame', 1); return false;">Board Game tái chế</a>
+            </div>
+        </div>
+        <div class="menu-item" onclick="showBestSellers(1)">Sản Phẩm Bán Chạy</div>
+        <div class="menu-item" onclick="showContent('warranty')">Chính sách bảo hành</div>
+        <div class="menu-item" onclick="showContent('stores')">Hệ thống cửa hàng</div>
+        <div class="menu-item" onclick="showContent('guide')">Hướng dẫn sử dụng</div>
+        <div class="menu-item" onclick="showContent('membership')">Chính sách thành viên</div>
+    </div>
+    
+    <div class="product-section" id="productSection">
+        <div class="product-grid" id="productGrid">
+        </div>
+        <div class="pagination" id="pagination">
+        </div>
+    </div>
+    
+    <div class="product-detail-section" id="productDetailSection">
+        <a href="#" class="back-button" onclick="showProducts('boardGame', currentPage); return false;">Quay lại</a>
+        <div class="product-info" id="productDetailContent">
+        </div>
+    </div>
+    
+    <div class="content-section" id="warrantyContent">
+        <h2>Chính sách bảo hành</h2>
+        <p>Chính sách bảo hành của Sợi Xanh đảm bảo quyền lợi tối đa cho khách hàng. Tất cả sản phẩm Board Game tái chế được bảo hành trong vòng 30 ngày kể từ ngày mua hàng. Nếu sản phẩm có lỗi từ nhà sản xuất, chúng tôi sẽ đổi sản phẩm mới hoặc hoàn tiền 100%. Vui lòng giữ hóa đơn và liên hệ hotline 0976.654.536.</p>
+    </div>
+    
+    <div class="content-section" id="storesContent">
+        <h2>Hệ thống cửa hàng</h2>
+        <p>Sợi Xanh hiện có 5 cửa hàng tại Thạch Thất, Hà Nội. Quý khách có thể ghé thăm để trải nghiệm trực tiếp các sản phẩm Board Game tái chế. Tra cứu địa chỉ chi tiết qua website hoặc gọi 0976.654.536 để được hỗ trợ.</p>
+    </div>
+    
+    <div class="content-section" id="guideContent">
+        <h2>Hướng dẫn sử dụng</h2>
+        <p>Board Game tái chế của Sợi Xanh nên được bảo quản ở nơi khô ráo, tránh ánh nắng trực tiếp. Lau sạch bằng khăn ẩm nếu cần. Hướng dẫn chi tiết đi kèm sản phẩm, hoặc liên hệ chúng tôi để được tư vấn thêm.</p>
+    </div>
+    
+    <div class="content-section" id="membershipContent">
+        <h2>Chính sách thành viên</h2>
+        <p>Thành viên Sợi Xanh được giảm 10% cho mỗi đơn hàng Board Game tái chế, tích điểm đổi quà, và ưu đãi độc quyền. Đăng ký tài khoản và mua sắm từ 500K để tham gia ngay!</p>
+    </div>
+    
+    <div class="promo-banner">
+        <strong>FREESHIP</strong><br>
+        Miễn phí đơn hàng từ 299K<br>
+        <a href="#">Sao chép mã</a> | <a href="#">Đổi kiến</a>
+    </div>
+    
+    <div class="social-icons">
+        <div class="contact-text">Liên hệ với chúng tôi qua</div> 
+        <a href="https://www.facebook.com/profile.php?id=61576975775753" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook"></a>
+        <a href="https://www.tiktok.com/@nghiaclash" target="_blank"><img src="https://cdn.pixabay.com/photo/2021/06/15/12/28/tiktok-6338432_960_720.png" alt="TikTok"></a>
+        <a href="https://chat.zalo.me/" target="_blank"><img src="https://inhoangha.com/uploads/tai-zalo-logo-vector.jpg" alt="Zalo"></a>
+    </div>
+
+    <script>
+        // Phần JavaScript giữ nguyên như trước
+        const products = {
+            boardGame: [
+                { name: "Board Game tái chế - Trò chơi gia đình", price: "99,000", image: "https://cdn11.dienmaycholon.vn/filewebdmclnew/public/userupload/files/Knms/meo-vat/thanh-phan-co-ban-cua-bo-co-ty-phu.jpg", discount: "50%", description: "Trò chơi gia đình thân thiện môi trường, tái chế từ carton.", sold: "50" },
+                { name: "Board Game tái chế - Chiến lược cổ điển", price: "149,000", image: "https://bizweb.dktcdn.net/100/316/286/files/banco-1617679297.jpg?v=1671262687964", discount: "30%", description: "Trò chơi chiến lược tái chế, phù hợp cho 2-6 người chơi.", sold: "30" },
+                { name: "Board Game tái chế - Phiêu lưu khám phá", price: "199,000", image: "https://cdn.tgdd.vn/Files/2021/12/30/1408124/luat-choi-huong-dan-choi-co-ty-phu-cho-nguoi-moi-choi-202112301718048868.jpg", discount: "40%", description: "Trải nghiệm phiêu lưu tái chế, dành cho trẻ em và người lớn.", sold: "20" },
+                { name: "Board Game tái chế - Thám tử đường phố", price: "120,000", image: "https://cdp-api.printgo.vn/uploads/products/set-co-ty-phu-gifgo(7).jpg", discount: "20%", description: "Board game thám tử, rèn luyện tư duy logic.", sold: "15" },
+                { name: "Board Game tái chế - Xây dựng đế chế", price: "250,000", image: "https://thanhnien.mediacdn.vn/uploaded/nuvuong/2020_05_19/2_TOPW.jpg?width=500", discount: "10%", description: "Xây dựng đế chế của riêng bạn với board game tái chế.", sold: "10" },
+                { name: "Board Game tái chế - Cuộc đua kỳ thú", price: "80,000", image: "https://cdn2.fptshop.com.vn/unsafe/1920x0/filters:format(webp):quality(75)/2024_1_8_638403479916167031_cach-choi-co-ty-phu.jpg", discount: "60%", description: "Cuộc đua tốc độ, giành chiến thắng cùng bạn bè.", sold: "45" },
+                { name: "Board Game tái chế - Vườn thú vui vẻ", price: "110,000", image: "https://cdn.chiaki.vn/unsafe/0x500/left/top/smart/filters:quality(75)/https://chiaki.vn/upload/news/content/2023/11/bo-co-ty-phu-nam-cham-foxi-thuong-nhan-hoi-an-chiaki-vn-1-jpg-1699862008-13112023145328.jpg", discount: "25%", description: "Xây dựng và quản lý vườn thú của riêng bạn.", sold: "22" },
+                { name: "Board Game tái chế - Đại chiến không gian", price: "180,000", image: "https://hiepsibaotap.com/wp-content/uploads/2019/08/huong-dan-choi-board-game-monopoly-chi-tiet-1.jpg", discount: "35%", description: "Trận chiến ngoài không gian đầy kịch tính.", sold: "18" },
+                { name: "Board Game tái chế - Nông trại hạnh phúc", price: "95,000", image: "https://thanhnien.mediacdn.vn/uploaded/nuvuong/2020_05_19/1_GWOJ.jpg?width=500", discount: "40%", description: "Quản lý nông trại và thu hoạch nông sản.", sold: "38" }
+            ]
+        };
+
+        let productsPerPage = 6;
+        let currentPage = 1;
+        let currentCategory = 'boardGame';
+        let currentSearchTerm = '';
+
+        const searchInput = document.getElementById('searchInput');
+        const searchButton = document.getElementById('searchButton');
+        const productGrid = document.getElementById('productGrid');
+        const productSection = document.getElementById('productSection');
+        const productDetailSection = document.getElementById('productDetailSection');
+        const contentSections = document.querySelectorAll('.content-section');
+        const paginationContainer = document.getElementById('pagination');
+
+        function displayProducts(productsToDisplay, page = 1) {
+            productGrid.innerHTML = '';
+            const startIndex = (page - 1) * productsPerPage;
+            const endIndex = startIndex + productsPerPage;
+            const paginatedProducts = productsToDisplay.slice(startIndex, endIndex);
+
+            if (paginatedProducts.length === 0) {
+                productGrid.innerHTML = '<p class="no-search-results">Không tìm thấy sản phẩm nào phù hợp.</p>';
+                paginationContainer.style.display = 'none';
+                return;
+            } else {
+                paginationContainer.style.display = 'flex';
+            }
+
+            paginatedProducts.forEach((product) => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <div class="discount">${product.discount}</div>
+                    <img src="${product.image}" alt="${product.name}">
+                    <div class="info">
+                        <div class="name">${product.name}</div>
+                        <div class="price">${product.price} VNĐ</div>
+                        <div class="sold">Đã bán: ${product.sold}</div>
+                    </div>
+                `;
+                card.addEventListener('click', () => showProductDetailByProductObject(product));
+                productGrid.appendChild(card);
+            });
+
+            renderPagination(productsToDisplay.length, page, displayProducts, productsToDisplay);
+        }
+
+        function handleSearch() {
+            currentSearchTerm = searchInput.value.toLowerCase().trim();
+            let allProducts = products.boardGame; 
+            const filteredProducts = allProducts.filter(product => 
+                product.name.toLowerCase().includes(currentSearchTerm)
+            );
+            currentPage = 1; 
+            displayProducts(filteredProducts, currentPage);
+            contentSections.forEach(section => section.style.display = 'none');
+            productDetailSection.style.display = 'none';
+            productSection.style.display = 'block';
+        }
+
+        searchButton.addEventListener('click', handleSearch);
+        searchInput.addEventListener('keyup', (event) => {
+            if (event.key === 'Enter') {
+                handleSearch();
+            }
+        });
+
+        function showProducts(category, page = 1) {
+            currentCategory = category;
+            currentPage = page;
+            currentSearchTerm = '';
+            searchInput.value = ''; 
+            productSection.style.display = 'block';
+            productDetailSection.style.display = 'none';
+            contentSections.forEach(section => section.style.display = 'none');
+            const categoryProducts = products[category];
+            displayProducts(categoryProducts, currentPage);
+        }
+
+        function showBestSellers(page = 1) {
+            currentCategory = 'bestSellers'; 
+            currentPage = page;
+            currentSearchTerm = '';
+            searchInput.value = ''; 
+            productSection.style.display = 'block';
+            productDetailSection.style.display = 'none';
+            contentSections.forEach(section => section.style.display = 'none');
+            const bestSellers = products.boardGame.filter(product => parseInt(product.sold) >= 30);
+            displayProducts(bestSellers, currentPage);
+        }
+
+        function renderPagination(totalProducts, currentPage, displayFunction, productsSource) {
+            const paginationContainer = document.getElementById('pagination');
+            paginationContainer.innerHTML = ''; 
+            const totalPages = Math.ceil(totalProducts / productsPerPage);
+
+            if (totalPages <= 1) {
+                paginationContainer.style.display = 'none';
+                return;
+            } else {
+                paginationContainer.style.display = 'flex';
+            }
+
+            const prevButton = document.createElement('button');
+            prevButton.textContent = 'Trước';
+            prevButton.disabled = currentPage === 1;
+            prevButton.addEventListener('click', () => displayFunction(productsSource, currentPage - 1));
+            paginationContainer.appendChild(prevButton);
+
+            for (let i = 1; i <= totalPages; i++) {
+                const pageButton = document.createElement('button');
+                pageButton.textContent = i;
+                if (i === currentPage) {
+                    pageButton.classList.add('active');
+                }
+                pageButton.addEventListener('click', () => displayFunction(productsSource, i));
+                paginationContainer.appendChild(pageButton);
+            }
+
+            const nextButton = document.createElement('button');
+            nextButton.textContent = 'Sau';
+            nextButton.disabled = currentPage === totalPages;
+            nextButton.addEventListener('click', () => displayFunction(productsSource, currentPage + 1));
+            paginationContainer.appendChild(nextButton);
+        }
+
+        function showProductDetailByProductObject(product) {
+            productSection.style.display = 'none';
+            productDetailSection.style.display = 'block';
+            contentSections.forEach(section => section.style.display = 'none');
+
+            const detailContent = document.getElementById('productDetailContent');
+            detailContent.innerHTML = `
+                <img src="${product.image}" alt="${product.name}">
+                <div class="details">
+                    <div class="name">${product.name}</div>
+                    <div class="price">${product.price} VNĐ</div>
+                    <div class="discount">${product.discount}</div>
+                    <div class="sold">Đã bán: ${product.sold}</div>
+                    <div class="policy">
+                        <h3>Mô tả</h3>
+                        <p>${product.description}</p>
+                        <h3>Đổi trả</h3>
+                        <p>Chấp nhận đổi trả trong vòng 7 ngày nếu sản phẩm còn nguyên vẹn và có lỗi từ nhà sản xuất. Vui lòng mang hóa đơn khi đổi trả.</p>
+                        <h3>Bảo hành</h3>
+                        <p>Bảo hành sản phẩm trong 30 ngày kể từ ngày mua. Sản phẩm lỗi sẽ được đổi mới hoặc hoàn tiền 100%.</p>
+                    </div>
+                </div>
+            `;
+            
+            const backButton = document.querySelector('.product-detail-section .back-button');
+            backButton.onclick = () => {
+                if (currentSearchTerm) {
+                    handleSearch(); 
+                } else {
+                    if (currentCategory === 'bestSellers') {
+                        showBestSellers(currentPage);
+                    } else {
+                        showProducts(currentCategory, currentPage);
+                    }
+                }
+                return false;
+            };
+        }
+
+        function showContent(sectionId) {
+            productSection.style.display = 'none';
+            productDetailSection.style.display = 'none';
+            contentSections.forEach(section => section.style.display = 'none');
+            const selectedSection = document.getElementById(sectionId + 'Content');
+            selectedSection.style.display = 'block';
+        }
+
+        window.addEventListener('load', () => {
+            showProducts('boardGame', 1); 
+        });
+    </script>
+</body>
+</html>
